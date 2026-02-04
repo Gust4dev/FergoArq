@@ -2,7 +2,8 @@ export interface Project {
   id: number;
   title: string;
   category: string;
-  imageLabel: string;
+  image: string;
+  images: string[];
 }
 
 export interface Service {

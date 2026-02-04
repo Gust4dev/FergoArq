@@ -1,5 +1,4 @@
 import React from "react";
-import Placeholder from "./Placeholder";
 import { ArrowDown } from "lucide-react";
 
 const Hero: React.FC = () => {
@@ -33,10 +32,10 @@ const Hero: React.FC = () => {
         </div>
 
         <div className="lg:col-span-7 order-1 lg:order-2 h-[50vh] lg:h-[80vh] w-full">
-          <Placeholder
-            label="FOTO HERO - PROJETO DESTAQUE"
-            className="h-full w-full rounded-sm"
-            aspectRatio="aspect-auto"
+          <img
+            src="/Sala comercial London Eye/WhatsApp Image 2026-02-04 at 15.46.18.webp"
+            alt="Sala Comercial London Eye - Projeto em Destaque"
+            className="h-full w-full object-cover rounded-sm"
           />
         </div>
       </div>
