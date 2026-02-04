@@ -1,0 +1,89 @@
+import React, { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
+import { NavItem } from "../types";
+
+const navItems: NavItem[] = [
+  { label: "Home", href: "#home" },
+  { label: "Sobre", href: "#sobre" },
+  { label: "Portfólio", href: "#portfolio" },
+  { label: "Serviços", href: "#servicos" },
+  { label: "Contato", href: "#contato" },
+];
+
+const Header: React.FC = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <header
+      className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
+        isScrolled || isMobileMenuOpen
+          ? "bg-white/95 backdrop-blur-sm shadow-sm py-4"
+          : "bg-transparent py-6"
+      }`}
+    >
+      <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
+        <div className="z-50">
+          <a
+            href="#"
+            className={`font-serif text-2xl tracking-widest uppercase font-bold ${isScrolled || isMobileMenuOpen ? "text-brand-black" : "text-brand-black"}`}
+          >
+            Sabrina Fergo
+          </a>
+          <p
+            className={`text-[10px] tracking-[0.3em] uppercase hidden md:block ${isScrolled ? "text-brand-gray" : "text-brand-dark"}`}
+          >
+            Arquitetura & Interiores
+          </p>
+        </div>
+
+        <nav className="hidden md:flex space-x-8">
+          {navItems.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className={`text-sm tracking-widest uppercase hover:text-stone-500 transition-colors ${
+                isScrolled ? "text-brand-dark" : "text-brand-black"
+              }`}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        <button
+          className="md:hidden z-50 text-brand-black"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
+        <div
+          className={`fixed inset-0 bg-white z-40 flex flex-col justify-center items-center space-y-8 transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"} md:hidden`}
+        >
+          {navItems.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-serif text-2xl text-brand-black hover:text-stone-500 transition-colors"
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
