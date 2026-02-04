@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sabrinafergo.com.br/sitemap.xml
