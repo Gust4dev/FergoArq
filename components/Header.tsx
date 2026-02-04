@@ -22,16 +22,27 @@ const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isScrolled || isMobileMenuOpen
           ? "bg-white/95 backdrop-blur-sm shadow-sm py-4"
           : "bg-transparent py-6"
       }`}
     >
-      <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
-        <div className="z-50">
+      <div className="container mx-auto px-6 md:px-12 flex justify-between items-center relative z-50">
+        <div>
           <a
             href="#"
             className={`font-serif text-2xl tracking-widest uppercase font-bold ${isScrolled || isMobileMenuOpen ? "text-brand-black" : "text-brand-black"}`}
@@ -60,27 +71,29 @@ const Header: React.FC = () => {
         </nav>
 
         <button
-          className="md:hidden z-50 text-brand-black"
+          className="md:hidden text-brand-black focus:outline-none"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
+      </div>
 
-        <div
-          className={`fixed inset-0 bg-white z-40 flex flex-col justify-center items-center space-y-8 transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"} md:hidden`}
-        >
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="font-serif text-2xl text-brand-black hover:text-stone-500 transition-colors"
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
+      <div
+        className={`fixed top-0 left-0 w-full h-screen bg-white z-40 flex flex-col justify-center items-center space-y-8 transition-transform duration-300 ease-in-out md:hidden pt-20 ${
+          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        {navItems.map((item) => (
+          <a
+            key={item.label}
+            href={item.href}
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="font-serif text-2xl text-brand-black hover:text-stone-500 transition-colors"
+          >
+            {item.label}
+          </a>
+        ))}
       </div>
     </header>
   );
