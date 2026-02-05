@@ -8,9 +8,11 @@ const About: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div className="relative">
             <div className="w-full aspect-[3/4] max-w-md mx-auto md:mr-auto">
-              <Placeholder
-                label="FOTO RETRATO SABRINA"
-                aspectRatio="aspect-[3/4]"
+              <img
+                src="/about/about.webp"
+                alt="Sabrina Fergo - Arquiteta"
+                className="w-full h-full object-cover"
+                loading="lazy"
               />
             </div>
             <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-stone-200 -z-10 hidden md:block"></div>

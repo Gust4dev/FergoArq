@@ -6,7 +6,7 @@ const projects: Project[] = [
     id: 1,
     title: "AP Terrazo JK",
     category: "Residencial",
-    image: "/AP TERRAZO JK/WhatsApp Image 2026-02-04 at 15.48.57.webp",
+    image: "/AP TERRAZO JK/capa.webp",
     images: [
       "/AP TERRAZO JK/WhatsApp Image 2026-02-04 at 15.48.57.webp",
       "/AP TERRAZO JK/WhatsApp Image 2026-02-04 at 15.48.57 (1).webp",
@@ -19,7 +19,7 @@ const projects: Project[] = [
     id: 2,
     title: "Suíte JJ",
     category: "Residencial",
-    image: "/SUÍTE JJ/WhatsApp Image 2026-02-04 at 15.50.37.webp",
+    image: "/SUÍTE JJ/capa.webp",
     images: [
       "/SUÍTE JJ/WhatsApp Image 2026-02-04 at 15.50.37.webp",
       "/SUÍTE JJ/WhatsApp Image 2026-02-04 at 15.50.37 (1).webp",
@@ -43,8 +43,7 @@ const projects: Project[] = [
     id: 4,
     title: "Sala Comercial London Eye",
     category: "Comercial",
-    image:
-      "/Sala comercial London Eye/WhatsApp Image 2026-02-04 at 15.46.18.webp",
+    image: "/Sala comercial London Eye/capa.webp",
     images: [
       "/Sala comercial London Eye/WhatsApp Image 2026-02-04 at 15.46.18.webp",
     ],
