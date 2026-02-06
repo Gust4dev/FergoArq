@@ -42,19 +42,13 @@ const Header: React.FC = () => {
       }`}
     >
       <div className="container mx-auto px-6 md:px-12 flex justify-between items-center relative z-50">
-        <div>
-          <a
-            href="#"
-            className={`font-serif text-2xl tracking-widest uppercase font-bold ${isScrolled || isMobileMenuOpen ? "text-brand-black" : "text-brand-black"}`}
-          >
-            Sabrina Fergo
-          </a>
-          <p
-            className={`text-[10px] tracking-[0.3em] uppercase hidden md:block ${isScrolled ? "text-brand-gray" : "text-brand-dark"}`}
-          >
-            Arquitetura & Interiores
-          </p>
-        </div>
+        <a href="#" className="block">
+          <img
+            src="/logo.svg"
+            alt="Sabrina Fergo - Arquitetura & Interiores"
+            className="h-16 md:h-20 w-auto"
+          />
+        </a>
 
         <nav className="hidden md:flex space-x-8">
           {navItems.map((item) => (

@@ -10,7 +10,6 @@ const projects: Project[] = [
     images: [
       "/AP TERRAZO JK/WhatsApp Image 2026-02-04 at 15.48.57.webp",
       "/AP TERRAZO JK/WhatsApp Image 2026-02-04 at 15.48.57 (1).webp",
-      "/AP TERRAZO JK/WhatsApp Image 2026-02-04 at 15.48.58.webp",
       "/AP TERRAZO JK/WhatsApp Image 2026-02-04 at 15.48.58 (1).webp",
       "/AP TERRAZO JK/WhatsApp Image 2026-02-04 at 15.48.58 (2).webp",
     ],

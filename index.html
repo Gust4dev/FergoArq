@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sabrina Fergo | Arquitetura</title>
+    <link rel="icon" type="image/webp" href="/favicon.webp" />
+    <link rel="apple-touch-icon" href="/favicon.webp" />
     <meta
       name="description"
       content="Projetos residenciais e comerciais que unem estética, funcionalidade e cuidado humano para transformar a experiência de viver. Sabrina Fergo Arquitetura."
@@ -23,7 +25,7 @@
     />
     <meta
       property="og:image"
-      content="/Sala comercial London Eye/WhatsApp Image 2026-02-04 at 15.46.18.webp"
+      content="https://sabrinafergo.com.br/favicon.webp"
     />
 
     <!-- Twitter -->
@@ -36,7 +38,7 @@
     />
     <meta
       property="twitter:image"
-      content="/Sala comercial London Eye/WhatsApp Image 2026-02-04 at 15.46.18.webp"
+      content="https://sabrinafergo.com.br/favicon.webp"
     />
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -74,6 +76,14 @@
       body {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+      }
+      /* Fix: Artefatos de renderização de SVGs (linhas diagonais fantasma) */
+      svg {
+        shape-rendering: geometricPrecision !important;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        outline: 1px solid transparent;
+        overflow: visible !important;
       }
     </style>
     <script type="importmap">

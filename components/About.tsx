@@ -1,17 +1,36 @@
 import React from "react";
-import Placeholder from "./Placeholder";
+
+/**
+ * Configuração da imagem About - ajuste esses valores para posicionar a foto
+ * scale: 1.0 = 100%, 1.2 = 120% zoom, 1.5 = 150% zoom
+ * positionX: "0%" = esquerda, "50%" = centro, "100%" = direita
+ * positionY: "0%" = topo, "50%" = centro, "100%" = base
+ */
+const ABOUT_IMAGE_CONFIG = {
+  src: "/about/about.webp",
+  alt: "Sabrina Fergo - Arquiteta",
+  scale: 1.0,
+  positionX: "50%",
+  positionY: "50%",
+};
 
 const About: React.FC = () => {
+  const imageStyle: React.CSSProperties = {
+    objectPosition: `${ABOUT_IMAGE_CONFIG.positionX} ${ABOUT_IMAGE_CONFIG.positionY}`,
+    transform: `scale(${ABOUT_IMAGE_CONFIG.scale})`,
+  };
+
   return (
     <section id="sobre" className="py-20 md:py-32 bg-brand-light">
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div className="relative">
-            <div className="w-full aspect-[3/4] max-w-md mx-auto md:mr-auto">
+            <div className="w-full aspect-[3/4] max-w-md mx-auto md:mr-auto overflow-hidden shadow-xl">
               <img
-                src="/about/about.webp"
-                alt="Sabrina Fergo - Arquiteta"
+                src={ABOUT_IMAGE_CONFIG.src}
+                alt={ABOUT_IMAGE_CONFIG.alt}
                 className="w-full h-full object-cover"
+                style={imageStyle}
                 loading="lazy"
               />
             </div>
