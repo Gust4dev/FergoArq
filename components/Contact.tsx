@@ -1,20 +1,33 @@
 import React from "react";
 import { Mail, MapPin, Phone } from "lucide-react";
+import { useRevealAnimation } from "../hooks/useRevealAnimation";
 
 const Contact: React.FC = () => {
+  const titleReveal = useRevealAnimation({ animation: "fadeInLeft" });
+  const infoReveal = useRevealAnimation({
+    animation: "fadeInLeft",
+    delay: 100,
+  });
+  const formReveal = useRevealAnimation({ animation: "fadeInRight" });
+
   return (
     <section id="contato" className="py-20 md:py-32 bg-brand-dark text-white">
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div>
-            <h2 className="font-serif text-4xl mb-6">Vamos conversar?</h2>
-            <p className="font-light text-stone-300 mb-12 max-w-md leading-relaxed">
-              Se você busca um projeto único, funcional e com identidade, entre
-              em contato. Estou pronta para transformar suas ideias em
-              realidade.
-            </p>
+            <div ref={titleReveal.ref} className={titleReveal.animationClass}>
+              <h2 className="font-serif text-4xl mb-6">Vamos conversar?</h2>
+              <p className="font-light text-stone-300 mb-12 max-w-md leading-relaxed">
+                Se você busca um projeto único, funcional e com identidade,
+                entre em contato. Estou pronta para transformar suas ideias em
+                realidade.
+              </p>
+            </div>
 
-            <div className="space-y-6">
+            <div
+              ref={infoReveal.ref}
+              className={`space-y-6 ${infoReveal.animationClass}`}
+            >
               <div className="flex items-start gap-4">
                 <Mail className="text-stone-400 mt-1" size={20} />
                 <div>
@@ -64,7 +77,8 @@ const Contact: React.FC = () => {
           </div>
 
           <form
-            className="space-y-6 bg-white/5 p-8 rounded-sm backdrop-blur-sm border border-white/10"
+            ref={formReveal.ref}
+            className={`space-y-6 bg-white/5 p-8 rounded-sm backdrop-blur-sm border border-white/10 ${formReveal.animationClass}`}
             onSubmit={(e) => e.preventDefault()}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

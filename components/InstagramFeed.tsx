@@ -1,5 +1,9 @@
 import React from "react";
 import { Instagram } from "lucide-react";
+import {
+  useRevealAnimation,
+  getStaggerDelay,
+} from "../hooks/useRevealAnimation";
 
 const INSTAGRAM_URL = "https://instagram.com/sabrinafergo";
 
@@ -10,15 +14,49 @@ const INSTAGRAM_IMAGES = [
   "/insta/insta4.webp",
 ];
 
+const InstagramItem: React.FC<{ src: string; index: number }> = ({
+  src,
+  index,
+}) => {
+  const itemReveal = useRevealAnimation({
+    animation: "scaleIn",
+    delay: getStaggerDelay(index, 100),
+  });
+
+  return (
+    <a
+      ref={itemReveal.ref}
+      href={INSTAGRAM_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`relative group overflow-hidden aspect-square ${itemReveal.animationClass}`}
+    >
+      <img
+        src={src}
+        alt={`Post Instagram ${index + 1}`}
+        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+        loading="lazy"
+      />
+      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+        <Instagram size={48} className="text-white" />
+      </div>
+    </a>
+  );
+};
+
 const InstagramFeed: React.FC = () => {
+  const headerReveal = useRevealAnimation({ animation: "fadeInUp" });
+  const ctaReveal = useRevealAnimation({ animation: "fadeInUp", delay: 200 });
+
   return (
     <section className="py-20 bg-brand-light">
       <div className="container mx-auto px-6 md:px-12">
         <a
+          ref={headerReveal.ref}
           href={INSTAGRAM_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-3 mb-12 hover:opacity-70 transition-opacity"
+          className={`flex items-center justify-center gap-3 mb-12 hover:opacity-70 transition-opacity ${headerReveal.animationClass}`}
         >
           <Instagram size={20} className="text-brand-dark" />
           <span className="text-sm uppercase tracking-widest font-medium">
@@ -28,27 +66,14 @@ const InstagramFeed: React.FC = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {INSTAGRAM_IMAGES.map((src, index) => (
-            <a
-              key={index}
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative group overflow-hidden aspect-square"
-            >
-              <img
-                src={src}
-                alt={`Post Instagram ${index + 1}`}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <Instagram size={48} className="text-white" />
-              </div>
-            </a>
+            <InstagramItem key={index} src={src} index={index} />
           ))}
         </div>
 
-        <div className="text-center mt-10">
+        <div
+          ref={ctaReveal.ref}
+          className={`text-center mt-10 ${ctaReveal.animationClass}`}
+        >
           <a
             href={INSTAGRAM_URL}
             target="_blank"

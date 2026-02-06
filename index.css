@@ -47,3 +47,108 @@ input,
 textarea {
   font-family: inherit;
 }
+
+/* ===========================================
+   REVEAL ANIMATION SYSTEM
+   Desktop: Full animations with transforms
+   Mobile: Simple fade for performance
+   =========================================== */
+
+/* Base states */
+.reveal-hidden {
+  opacity: 0;
+}
+
+.reveal-visible {
+  opacity: 1;
+}
+
+/* Mobile: Simple fade only */
+.reveal-fade {
+  transition: opacity 0.4s ease-out;
+}
+
+/* Desktop animations */
+@media (min-width: 768px) {
+  /* Fade In Up */
+  .reveal-fadeInUp.reveal-hidden {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .reveal-fadeInUp.reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out;
+  }
+
+  /* Fade In Left */
+  .reveal-fadeInLeft.reveal-hidden {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  .reveal-fadeInLeft.reveal-visible {
+    opacity: 1;
+    transform: translateX(0);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out;
+  }
+
+  /* Fade In Right */
+  .reveal-fadeInRight.reveal-hidden {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  .reveal-fadeInRight.reveal-visible {
+    opacity: 1;
+    transform: translateX(0);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out;
+  }
+
+  /* Scale In */
+  .reveal-scaleIn.reveal-hidden {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  .reveal-scaleIn.reveal-visible {
+    opacity: 1;
+    transform: scale(1);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out;
+  }
+
+  /* Stagger delays */
+  .reveal-delay-100 {
+    transition-delay: 0.1s !important;
+  }
+  .reveal-delay-200 {
+    transition-delay: 0.2s !important;
+  }
+  .reveal-delay-300 {
+    transition-delay: 0.3s !important;
+  }
+  .reveal-delay-400 {
+    transition-delay: 0.4s !important;
+  }
+  .reveal-delay-500 {
+    transition-delay: 0.5s !important;
+  }
+  .reveal-delay-600 {
+    transition-delay: 0.6s !important;
+  }
+}
+
+/* Accessibility: Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-hidden,
+  .reveal-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

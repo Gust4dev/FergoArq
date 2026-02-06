@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Project } from "../types";
+import {
+  useRevealAnimation,
+  getStaggerDelay,
+} from "../hooks/useRevealAnimation";
 
 const projects: Project[] = [
   {
@@ -49,69 +53,204 @@ const projects: Project[] = [
   },
 ];
 
+const ProjectCard: React.FC<{
+  project: Project;
+  index: number;
+  onClick: () => void;
+}> = ({ project, index, onClick }) => {
+  const cardReveal = useRevealAnimation({
+    animation: "fadeInUp",
+    delay: getStaggerDelay(index, 100),
+  });
+
+  return (
+    <div
+      ref={cardReveal.ref}
+      className={`group cursor-pointer ${cardReveal.animationClass}`}
+      onClick={onClick}
+    >
+      <div className="overflow-hidden mb-6">
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full aspect-[4/5] object-cover transform group-hover:scale-105 transition-transform duration-700"
+          loading="lazy"
+        />
+      </div>
+      <div className="flex justify-between items-baseline">
+        <h3 className="font-serif text-xl text-brand-black group-hover:text-stone-600 transition-colors">
+          {project.title}
+        </h3>
+        <span className="text-xs font-medium uppercase tracking-widest text-stone-400">
+          {project.category}
+        </span>
+      </div>
+      <p className="text-xs text-stone-400 mt-2">
+        {project.images.length}{" "}
+        {project.images.length === 1 ? "imagem" : "imagens"}
+      </p>
+    </div>
+  );
+};
+
 const Portfolio: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
-  // Touch handling for swipe
-  const touchStartX = React.useRef<number | null>(null);
-  const touchEndX = React.useRef<number | null>(null);
-  const minSwipeDistance = 50;
+  const headerReveal = useRevealAnimation({ animation: "fadeInUp" });
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchEndX.current = null;
-    touchStartX.current = e.targetTouches[0].clientX;
-  };
+  const touchStartX = useRef<number>(0);
+  const touchStartTime = useRef<number>(0);
+  const containerWidth = useRef<number>(0);
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
-    const distance = touchStartX.current - touchEndX.current;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-
-    if (isLeftSwipe) {
-      nextImage();
+  const nextImage = useCallback(() => {
+    if (selectedProject && selectedProject.images.length > 1) {
+      setCurrentImageIndex((prev) =>
+        prev < selectedProject.images.length - 1 ? prev + 1 : prev,
+      );
     }
-    if (isRightSwipe) {
-      prevImage();
+  }, [selectedProject]);
+
+  const prevImage = useCallback(() => {
+    if (selectedProject && selectedProject.images.length > 1) {
+      setCurrentImageIndex((prev) => (prev > 0 ? prev - 1 : prev));
     }
-  };
+  }, [selectedProject]);
 
   const openLightbox = (project: Project) => {
     setSelectedProject(project);
     setCurrentImageIndex(0);
+    setDragOffset(0);
   };
 
-  const closeLightbox = () => {
+  const closeLightbox = useCallback(() => {
     setSelectedProject(null);
     setCurrentImageIndex(0);
+    setDragOffset(0);
+  }, []);
+
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        nextImage();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prevImage();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        closeLightbox();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedProject, nextImage, prevImage, closeLightbox]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    touchStartX.current = e.touches[0].clientX;
+    touchStartTime.current = Date.now();
+    containerWidth.current = window.innerWidth;
+    setDragOffset(0);
   };
 
-  const nextImage = () => {
-    if (selectedProject) {
-      setCurrentImageIndex((prev) =>
-        prev < selectedProject.images.length - 1 ? prev + 1 : 0,
-      );
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || !selectedProject) return;
+
+    const currentX = e.touches[0].clientX;
+    let diff = currentX - touchStartX.current;
+
+    // Limit dragging at edges
+    const isAtStart = currentImageIndex === 0 && diff > 0;
+    const isAtEnd =
+      currentImageIndex === selectedProject.images.length - 1 && diff < 0;
+
+    if (isAtStart || isAtEnd) {
+      diff = diff * 0.3; // Rubber band effect at edges
+    }
+
+    setDragOffset(diff);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging || !selectedProject) return;
+    setIsDragging(false);
+
+    const threshold = containerWidth.current * 0.2;
+    const timeElapsed = Date.now() - touchStartTime.current;
+    const velocity = Math.abs(dragOffset) / timeElapsed;
+    const shouldSwipe = Math.abs(dragOffset) > threshold || velocity > 0.5;
+
+    if (shouldSwipe) {
+      if (
+        dragOffset < 0 &&
+        currentImageIndex < selectedProject.images.length - 1
+      ) {
+        setCurrentImageIndex((prev) => prev + 1);
+      } else if (dragOffset > 0 && currentImageIndex > 0) {
+        setCurrentImageIndex((prev) => prev - 1);
+      }
+    }
+
+    setDragOffset(0);
+  };
+
+  const handleImageClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!selectedProject || selectedProject.images.length <= 1) return;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
+    const percentX = clickX / width;
+
+    if (percentX < 0.25) {
+      prevImage();
+    } else if (percentX > 0.75) {
+      nextImage();
     }
   };
 
-  const prevImage = () => {
-    if (selectedProject) {
-      setCurrentImageIndex((prev) =>
-        prev > 0 ? prev - 1 : selectedProject.images.length - 1,
-      );
-    }
+  const getClickZoneCursor = (e: React.MouseEvent<HTMLDivElement>): string => {
+    if (!selectedProject || selectedProject.images.length <= 1)
+      return "default";
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const hoverX = e.clientX - rect.left;
+    const width = rect.width;
+    const percentX = hoverX / width;
+
+    if (percentX < 0.25 && currentImageIndex > 0) return "w-resize";
+    if (
+      percentX > 0.75 &&
+      currentImageIndex < selectedProject.images.length - 1
+    )
+      return "e-resize";
+    return "default";
+  };
+
+  const [cursorStyle, setCursorStyle] = useState("default");
+
+  // Calculate the transform for carousel effect
+  const getCarouselTransform = () => {
+    const baseOffset = -currentImageIndex * 100;
+    const dragPercent =
+      (dragOffset / (containerWidth.current || window.innerWidth)) * 100;
+    return `translateX(calc(${baseOffset}% + ${dragOffset}px))`;
   };
 
   return (
     <>
       <section id="portfolio" className="py-20 md:py-32 bg-white">
         <div className="container mx-auto px-6 md:px-12">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div
+            ref={headerReveal.ref}
+            className={`flex flex-col md:flex-row justify-between items-end mb-16 gap-6 ${headerReveal.animationClass}`}
+          >
             <div className="max-w-xl">
               <span className="text-xs font-bold tracking-widest uppercase text-stone-500 mb-4 block">
                 Portfólio
@@ -129,33 +268,13 @@ const Portfolio: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {projects.map((project) => (
-              <div
+            {projects.map((project, index) => (
+              <ProjectCard
                 key={project.id}
-                className="group cursor-pointer"
+                project={project}
+                index={index}
                 onClick={() => openLightbox(project)}
-              >
-                <div className="overflow-hidden mb-6">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full aspect-[4/5] object-cover transform group-hover:scale-105 transition-transform duration-700"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="flex justify-between items-baseline">
-                  <h3 className="font-serif text-xl text-brand-black group-hover:text-stone-600 transition-colors">
-                    {project.title}
-                  </h3>
-                  <span className="text-xs font-medium uppercase tracking-widest text-stone-400">
-                    {project.category}
-                  </span>
-                </div>
-                <p className="text-xs text-stone-400 mt-2">
-                  {project.images.length}{" "}
-                  {project.images.length === 1 ? "imagem" : "imagens"}
-                </p>
-              </div>
+              />
             ))}
           </div>
         </div>
@@ -169,7 +288,7 @@ const Portfolio: React.FC = () => {
           <button
             onClick={closeLightbox}
             className="absolute top-6 right-6 text-white/80 hover:text-white transition-colors z-10"
-            aria-label="Fechar"
+            aria-label="Fechar (Esc)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -201,8 +320,11 @@ const Portfolio: React.FC = () => {
                   e.stopPropagation();
                   prevImage();
                 }}
-                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors p-2"
-                aria-label="Imagem anterior"
+                className={`absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors p-2 z-20 hidden md:block ${
+                  currentImageIndex === 0 ? "opacity-30 cursor-not-allowed" : ""
+                }`}
+                aria-label="Imagem anterior (←)"
+                disabled={currentImageIndex === 0}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -224,8 +346,15 @@ const Portfolio: React.FC = () => {
                   e.stopPropagation();
                   nextImage();
                 }}
-                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors p-2"
-                aria-label="Próxima imagem"
+                className={`absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors p-2 z-20 hidden md:block ${
+                  currentImageIndex === selectedProject.images.length - 1
+                    ? "opacity-30 cursor-not-allowed"
+                    : ""
+                }`}
+                aria-label="Próxima imagem (→)"
+                disabled={
+                  currentImageIndex === selectedProject.images.length - 1
+                }
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -245,21 +374,41 @@ const Portfolio: React.FC = () => {
           )}
 
           <div
-            className="max-w-5xl max-h-[80vh] px-4 w-full flex flex-col items-center"
+            className="w-full max-w-5xl flex flex-col items-center"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Carousel Container */}
             <div
-              className="relative w-full flex justify-center"
+              className="w-full overflow-hidden"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
+              onClick={handleImageClick}
+              onMouseMove={(e) => setCursorStyle(getClickZoneCursor(e))}
+              style={{ cursor: cursorStyle }}
             >
-              <img
-                src={selectedProject.images[currentImageIndex]}
-                alt={`${selectedProject.title} - Imagem ${currentImageIndex + 1}`}
-                className="max-w-full max-h-[70vh] object-contain mx-auto select-none"
-                draggable={false}
-              />
+              <div
+                className="flex"
+                style={{
+                  transform: getCarouselTransform(),
+                  transition: isDragging ? "none" : "transform 0.3s ease-out",
+                }}
+              >
+                {selectedProject.images.map((image, idx) => (
+                  <div
+                    key={idx}
+                    className="w-full flex-shrink-0 flex items-center justify-center px-4"
+                    style={{ minWidth: "100%" }}
+                  >
+                    <img
+                      src={image}
+                      alt={`${selectedProject.title} - Imagem ${idx + 1}`}
+                      className="max-w-full max-h-[70vh] object-contain mx-auto select-none pointer-events-none"
+                      draggable={false}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
 
             <a
