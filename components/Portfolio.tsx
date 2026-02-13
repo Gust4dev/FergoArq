@@ -4,6 +4,7 @@ import {
   useRevealAnimation,
   getStaggerDelay,
 } from "../hooks/useRevealAnimation";
+import { buildWhatsAppUrl } from "../constants";
 
 const projects: Project[] = [
   {
@@ -26,7 +27,6 @@ const projects: Project[] = [
     images: [
       "/SUÍTE JJ/WhatsApp Image 2026-02-04 at 15.50.37.webp",
       "/SUÍTE JJ/WhatsApp Image 2026-02-04 at 15.50.37 (1).webp",
-      "/SUÍTE JJ/WhatsApp Image 2026-02-04 at 15.50.37 (2).webp",
       "/SUÍTE JJ/WhatsApp Image 2026-02-04 at 15.50.37 (3).webp",
       "/SUÍTE JJ/WhatsApp Image 2026-02-04 at 15.50.37 (4).webp",
       "/SUÍTE JJ/WhatsApp Image 2026-02-04 at 15.50.37 (5).webp",
@@ -412,7 +412,9 @@ const Portfolio: React.FC = () => {
             </div>
 
             <a
-              href={`https://wa.me/556296524616?text=Ol%C3%A1!%20Vi%20o%20projeto%20${encodeURIComponent(selectedProject.title)}%20no%20site%20e%20gostaria%20de%20saber%20mais%20sobre%20ele.`}
+              href={buildWhatsAppUrl(
+                `Olá! Vi o projeto ${selectedProject.title} no site e gostaria de saber mais sobre ele.`,
+              )}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-6 flex items-center gap-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white text-sm uppercase tracking-widest transition-all backdrop-blur-sm border border-white/20"

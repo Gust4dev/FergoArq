@@ -32,7 +32,7 @@ Site portfólio minimalista e elegante para a arquiteta Sabrina Fergo, especiali
 | React        | 19.x   | UI Library  |
 | TypeScript   | 5.8    | Type Safety |
 | Vite         | 6.x    | Build Tool  |
-| Tailwind CSS | CDN    | Styling     |
+| Tailwind CSS | 3.x    | Styling     |
 | Lucide React | 0.562  | Icons       |
 
 ---
@@ -95,13 +95,17 @@ FergoArq/
 │   ├── InstagramFeed.tsx # Feed do Instagram
 │   ├── Contact.tsx       # Formulário de contato
 │   ├── Footer.tsx        # Rodapé
-│   ├── WhatsAppButton.tsx# Botão flutuante WhatsApp
-│   └── Placeholder.tsx   # Componente para imagens pendentes
+│   └── WhatsAppButton.tsx# Botão flutuante WhatsApp
+├── hooks/
+│   └── useRevealAnimation.ts # Animações de scroll
 ├── App.tsx               # Componente raiz
+├── constants.ts          # Constantes centralizadas (contato, WhatsApp)
+├── types.ts              # Definições TypeScript
 ├── index.tsx             # Entry point React
 ├── index.html            # Template HTML
-├── index.css             # Estilos base
-├── types.ts              # Definições TypeScript
+├── index.css             # Estilos base + Tailwind
+├── tailwind.config.js    # Configuração Tailwind
+├── postcss.config.js     # Configuração PostCSS
 ├── vite.config.ts        # Configuração Vite
 ├── vercel.json           # Configuração Vercel
 └── package.json
@@ -111,19 +115,18 @@ FergoArq/
 
 ## Próximos Passos
 
-- [ ] Substituir Placeholders por imagens reais de projetos
-- [ ] Adicionar link real do Instagram
 - [ ] Implementar envio do formulário de contato
-- [ ] Adicionar meta tags para SEO
+- [ ] Registrar domínio sabrinafergo.com.br
+- [ ] Criar imagem OG dedicada (1200×630px)
 
 ---
 
 ## Contato
 
 **Sabrina Fergo**  
-📧 contato@sabrinafergo.com.br  
+📧 sabrinaarqeurb@gmail.com  
 📱 +55 62 9652-4616  
-📍 Goiânia, GO
+📍 London Eye Office — Anápolis-GO
 
 ---
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useRevealAnimation } from "../hooks/useRevealAnimation";
+import { CONTACT, buildWhatsAppUrl } from "../constants";
 
 const Contact: React.FC = () => {
   const titleReveal = useRevealAnimation({ animation: "fadeInLeft" });
@@ -35,10 +36,10 @@ const Contact: React.FC = () => {
                     Email
                   </h4>
                   <a
-                    href="mailto:contato@sabrinafergo.com.br"
+                    href="mailto:sabrinaarqeurb@gmail.com"
                     className="text-lg hover:text-stone-300 transition-colors"
                   >
-                    contato@sabrinafergo.com.br
+                    sabrinaarqeurb@gmail.com
                   </a>
                 </div>
               </div>
@@ -50,10 +51,12 @@ const Contact: React.FC = () => {
                     WhatsApp
                   </h4>
                   <a
-                    href="https://wa.me/556296524616?text=Ol%C3%A1!%20Vim%20pela%20se%C3%A7%C3%A3o%20de%20contato%20e%20gostaria%20de%20falar%20sobre%20um%20projeto."
+                    href={buildWhatsAppUrl(
+                      "Olá! Vim pela seção de contato e gostaria de falar sobre um projeto.",
+                    )}
                     className="text-lg hover:text-stone-300 transition-colors"
                   >
-                    +55 62 9652-4616
+                    {CONTACT.whatsapp.display}
                   </a>
                 </div>
               </div>
@@ -65,7 +68,7 @@ const Contact: React.FC = () => {
                     Localização
                   </h4>
                   <p className="text-lg text-stone-300">
-                    Atendimento em Goiânia e Região
+                    London Eye Office — Anápolis-GO
                     <br />
                     <span className="text-sm text-stone-500">
                       Projetos Online para todo o Brasil

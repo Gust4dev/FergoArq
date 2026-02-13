@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
         className={`container mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center text-xs uppercase tracking-widest ${footerReveal.animationClass}`}
       >
         <p>&copy; {new Date().getFullYear()} Sabrina Fergo Arquitetura.</p>
-        <div className="mt-4 md:mt-0 space-x-6">
+        <div className="mt-4 md:mt-0">
           <a
             href="https://instagram.com/sabrinafergo"
             target="_blank"
@@ -19,9 +19,6 @@ const Footer: React.FC = () => {
             className="hover:text-white transition-colors"
           >
             Instagram
-          </a>
-          <a href="#" className="hover:text-white transition-colors">
-            LinkedIn
           </a>
         </div>
       </div>

@@ -31,7 +31,7 @@ const Hero: React.FC = () => {
         <img
           src="/logo.svg"
           alt=""
-          className="w-[60vw] max-w-3xl opacity-[0.03] blur-sm -translate-x-[10%]"
+          className="w-[100vw] md:w-[60vw] max-w-3xl opacity-[0.05] md:opacity-[0.03] blur-sm -translate-x-[5%] md:-translate-x-[10%]"
           aria-hidden="true"
         />
       </div>

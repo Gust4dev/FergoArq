@@ -5,6 +5,7 @@ import {
   useRevealAnimation,
   getStaggerDelay,
 } from "../hooks/useRevealAnimation";
+import { buildWhatsAppUrl } from "../constants";
 
 const services: Service[] = [
   {
@@ -58,7 +59,9 @@ const ServiceCard: React.FC<{ service: Service; index: number }> = ({
         {service.description}
       </p>
       <a
-        href={`https://wa.me/556296524616?text=Ol%C3%A1!%20Tenho%20interesse%20em%20um%20projeto%20de%20${encodeURIComponent(service.title)}.`}
+        href={buildWhatsAppUrl(
+          `Olá! Tenho interesse em um projeto de ${service.title}.`,
+        )}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-block text-xs font-bold uppercase tracking-widest text-brand-black border-b border-brand-black/30 pb-1 hover:border-brand-black transition-colors"
